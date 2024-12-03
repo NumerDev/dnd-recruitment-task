@@ -2,10 +2,12 @@
 import Button from "@/app/components/common/Button";
 import Card from "@/app/components/common/Card";
 import MenuForm from "@/app/components/Form/MenuForm";
+import { AddMenuFormSchema } from "@/app/components/Form/schema";
+import { useNavigationContext } from "@/context/NavigationContext";
 import { useState } from "react";
-
 const ExpandMenuItem = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { addMenuItem } = useNavigationContext();
 
   const handleOpenForm = () => {
     setIsOpen(true);
@@ -15,11 +17,10 @@ const ExpandMenuItem = () => {
     setIsOpen(false);
   };
 
-  const handleAddMenuItem = () =>
-    // data: AddMenuFormSchema
-    {
-      handleCloseForm();
-    };
+  const handleAddMenuItem = (data: AddMenuFormSchema) => {
+    addMenuItem(data);
+    handleCloseForm();
+  };
 
   return (
     <>

@@ -2,8 +2,11 @@
 import Button from "@/app/components/common/Button";
 import FormInput from "@/app/components/Form/FormInput";
 import type { AddMenuFormSchema } from "@/app/components/Form/schema";
-import { addMenuFormSchema } from "@/app/components/Form/schema";
-
+import {
+  addMenuFormSchema,
+  defaultFormValues,
+} from "@/app/components/Form/schema";
+import { useSortableTreeHandlers } from "@/app/components/SortableTree/handlers";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef } from "react";
@@ -28,17 +31,26 @@ interface AddMenuFormProps {
 const MenuForm = forwardRef<HTMLFormElement, AddMenuFormProps>(
   (
     {
+      onSubmit,
       onEdit,
       onAdd,
-
+      onCancel,
       onRemove,
       selectedItemId,
       actionButtons = true,
       editMode = false,
       addSubItemMode = false,
+      initialValues = defaultFormValues,
     },
     ref
   ) => {
+    const { findItemById } = useSortableTreeHandlers();
+    const defaultFormValue = initialValues
+      ? editMode && selectedItemId
+        ? findItemById(selectedItemId)?.data
+        : initialValues
+      : initialValues;
+
     const {
       register,
       handleSubmit,
@@ -48,7 +60,7 @@ const MenuForm = forwardRef<HTMLFormElement, AddMenuFormProps>(
     } = useForm<AddMenuFormSchema>({
       mode: "onChange",
       resolver: zodResolver(addMenuFormSchema),
-      defaultValues: { name: "", link: "" },
+      defaultValues: defaultFormValue,
     });
 
     const handleOnSubmit = (data: AddMenuFormSchema) => {
@@ -59,11 +71,16 @@ const MenuForm = forwardRef<HTMLFormElement, AddMenuFormProps>(
         return onEdit(selectedItemId, data);
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      onSubmit && onSubmit(data);
+
       reset();
     };
 
     const handleOnCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      onCancel && onCancel();
       clearErrors();
       reset();
     };

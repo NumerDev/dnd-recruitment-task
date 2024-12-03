@@ -3,7 +3,7 @@ import Button from "@/app/components/common/Button";
 import Card from "@/app/components/common/Card";
 import MenuForm from "@/app/components/Form/MenuForm";
 import GroupButton from "@/app/components/Menu/GroupButton";
-// import { TreeItemData } from '@/app/components/SortableTree/sortableTreeTypes';
+import { TreeItemData } from "@/app/components/SortableTree/sortableTreeTypes";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { forwardRef, HTMLAttributes, useState } from "react";
 import { RiDragMove2Fill } from "react-icons/ri";
@@ -15,12 +15,14 @@ export interface TreeMenuItemProps
   disableInteraction?: boolean;
   disableSelection?: boolean;
   ghost?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleProps?: any;
   indicator?: boolean;
   indentationWidth: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
+  data: TreeItemData;
   onRemove?(): void;
-
+  onEdit?(id: UniqueIdentifier, data: TreeItemData): void;
+  onAdd?(id: UniqueIdentifier, data: TreeItemData): void;
   wrapperRef?(node: HTMLLIElement): void;
 }
 // eslint-disable-next-line react/display-name
@@ -30,11 +32,11 @@ const TreeMenuItem = forwardRef<HTMLDivElement, TreeMenuItemProps>(
       id,
       clone,
       depth,
-
+      handleProps,
       indentationWidth,
-
       onRemove,
-
+      onEdit,
+      onAdd,
       style,
       data,
       wrapperRef,
@@ -63,11 +65,21 @@ const TreeMenuItem = forwardRef<HTMLDivElement, TreeMenuItemProps>(
       setIsAddMenuOpen(false);
     };
 
-    const handleOnEditMenuSubmit = () => {
+    const handleOnEditMenuSubmit = (
+      id: UniqueIdentifier,
+      data: TreeItemData
+    ) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      onEdit && onEdit(id, data);
       handleOnCloseEditMenu();
     };
 
-    const handleOnAddMenuSubmit = () => {
+    const handleOnAddMenuSubmit = (
+      id: UniqueIdentifier,
+      data: TreeItemData
+    ) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      onAdd && onAdd(id, data);
       handleOnCloseAddMenu();
     };
 
@@ -97,6 +109,7 @@ const TreeMenuItem = forwardRef<HTMLDivElement, TreeMenuItemProps>(
               variant="icon"
               icon={<RiDragMove2Fill />}
               className="cursor-grab"
+              {...handleProps}
             />
             <div className="flex flex-col gap-1.5">
               <div className={"text-sm font-semibold text-secondary-11"}>

@@ -1,22 +1,24 @@
 "use client";
 import Button from "@/app/components/common/Button";
 import MenuForm from "@/app/components/Form/MenuForm";
+import { AddMenuFormSchema } from "@/app/components/Form/schema";
+import { useNavigationContext } from "@/context/NavigationContext";
 import { useState } from "react";
 import { TbCirclePlus } from "react-icons/tb";
 
 const EmptyMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { addMenuItem } = useNavigationContext();
 
   const handleOpenForm = () => [setIsMenuOpen(true)];
 
   const handleCloseForm = () => {
     setIsMenuOpen(false);
   };
-  const handleAddMenuItem = () =>
-    // data: AddMenuFormSchema
-    {
-      handleCloseForm();
-    };
+  const handleAddMenuItem = (data: AddMenuFormSchema) => {
+    addMenuItem(data);
+    handleCloseForm();
+  };
 
   return (
     <>
