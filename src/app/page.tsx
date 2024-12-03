@@ -1,11 +1,5 @@
-import GroupButton from "@/app/components/Menu/GroupButton";
-
 const Home = () => {
-  return (
-    <>
-      <GroupButton />
-    </>
-  );
+  return <></>;
 };
 
 export default Home;
