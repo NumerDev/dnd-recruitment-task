@@ -3,7 +3,8 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
   error?: string;
   icon?: React.ReactNode;
-  //   register: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  register: any;
 }
 
 const FormInput = ({
@@ -11,7 +12,7 @@ const FormInput = ({
   placeholder = "Placeholder",
   name,
   error,
-  //   register,
+  register,
   icon,
   ...props
 }: FormInputProps) => {
@@ -32,7 +33,7 @@ const FormInput = ({
           placeholder={placeholder}
           name={name}
           {...props}
-          //   {...register(name)}
+          {...register(name)}
         />
       </div>
       {error && <p className="text-xs text-red-500">{error}</p>}
