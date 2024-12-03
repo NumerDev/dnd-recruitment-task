@@ -1,5 +1,11 @@
+import Button from "@/app/components/common/Button";
+
 const Home = () => {
-  return <></>;
+  return (
+    <>
+      <Button />
+    </>
+  );
 };
 
 export default Home;
